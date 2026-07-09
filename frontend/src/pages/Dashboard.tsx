@@ -13,10 +13,11 @@ export const Dashboard: React.FC = () => {
     const [view, setView] = useState<'kanban' | 'list'>('kanban');
     const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
     const [showForm, setShowForm] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
-        fetchTickets();
-    }, [fetchTickets]);
+        fetchTickets(searchQuery);
+    }, [fetchTickets, searchQuery]);
 
     const handleStatusChange = async (ticketId: number, status: TicketStatus) => {
         await updateTicket(ticketId, { status });
@@ -42,7 +43,7 @@ export const Dashboard: React.FC = () => {
             </header>
             
             <main>
-                <div className="dashboard-controls">
+                <div className="dashboard-controls" style={{ gap: '1.5rem' }}>
                     <div className="filters">
                         <button 
                             className={`btn ${view === 'kanban' ? 'btn-primary' : 'btn-secondary'}`}
@@ -57,6 +58,16 @@ export const Dashboard: React.FC = () => {
                             List
                         </button>
                     </div>
+                    
+                    <div style={{ flex: 1, maxWidth: '400px' }}>
+                        <input 
+                            type="text" 
+                            placeholder="Search tickets by title or customer..." 
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+
                     <button className="btn btn-primary" onClick={() => setShowForm(true)}>+ New Ticket</button>
                 </div>
 

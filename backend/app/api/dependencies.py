@@ -13,7 +13,7 @@ from app.services.ticket_service import TicketService
 from app.models.user import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
-
+""
 def get_db() -> Generator:
     db = SessionLocal()
     try:

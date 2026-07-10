@@ -10,7 +10,7 @@ def seed():
         if not user:
             print(f"Creating default '{settings.ADMIN_USERNAME}' user...")
             hashed_password = get_password_hash(settings.ADMIN_PASSWORD)
-            new_user = User(username=settings.ADMIN_USERNAME, hashed_password=hashed_password, role="agent")
+            new_user = User(username=settings.ADMIN_USERNAME, hashed_password=hashed_password, role="admin")
             db.add(new_user)
             db.commit()
             print("User created successfully!")

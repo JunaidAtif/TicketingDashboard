@@ -2,10 +2,6 @@
 
 A full-stack, Jira-style support ticket management system designed for customer support teams. Built with a modern React frontend and a highly scalable FastAPI backend.
 
-**Live Demo:** [https://ticketingdashboard-three.vercel.app](https://ticketingdashboard-three.vercel.app)
-**Backend API:** [https://ticketingdashboard-production.up.railway.app](https://ticketingdashboard-production.up.railway.app)
-**API Docs (Swagger):** [https://ticketingdashboard-production.up.railway.app/docs](https://ticketingdashboard-production.up.railway.app/docs)
-
 ---
 
 ## Key Features
@@ -57,12 +53,36 @@ The frontend utilizes a **Feature-based Module Structure**.
 ### Prerequisites
 - Python 3.10+
 - Node.js 18+
-- Docker & Docker Compose (For PostgreSQL)
+- Docker & Docker Compose
 
-### 1. Database Setup
-Start the PostgreSQL container in the background:
+### Quickstart (Docker Compose)
+The fastest way to run the entire stack locally:
 ```bash
-docker compose up -d
+# 1. Copy and configure environment variables
+cp backend/.env.example backend/.env
+
+# 2. Start all services (database, backend, frontend)
+docker compose up --build
+
+# 3. Open the app
+# Frontend: http://localhost:5173
+# Backend API: http://localhost:8000
+# Swagger Docs: http://localhost:8000/docs
+```
+
+The Docker Compose setup automatically:
+- Starts a PostgreSQL database
+- Runs database migrations (`alembic upgrade head`)
+- Seeds the default admin user
+- Starts the FastAPI backend
+- Builds and serves the React frontend via Nginx
+
+### Manual Setup (Without Docker)
+
+#### 1. Database Setup
+Start only the PostgreSQL container in the background:
+```bash
+docker compose up db -d
 ```
 
 ### 2. Backend Setup
@@ -120,12 +140,18 @@ npm run dev
 ```
 *The frontend application will be accessible at the URL shown in your terminal (usually `http://localhost:5173`).*
 
+### 4. Open the App
+Once everything is running, you can access the different parts of the application here:
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:8000
+- **Swagger Docs**: http://localhost:8000/docs
+
 ---
 
 ## Default Login Credentials
 Since the application is protected by JWT authentication, you will need to log in to view the dashboard. Use the following credentials created by the database seed script:
 
-- **Username**: `agent`
+- **Username**: `admin`
 - **Password**: `password123`
 
 *(Note: These default credentials can be customized via the `ADMIN_USERNAME` and `ADMIN_PASSWORD` variables in the `backend/.env` file).*
@@ -142,6 +168,41 @@ source venv/bin/activate
 export PYTHONPATH=. 
 pytest tests/ -v
 ```
+
+---
+
+## Cloud Deployment
+
+The application is designed to be deployed with the backend on **Railway** (or any container host) and the frontend on **Vercel** (or any static host). All configuration is driven by environment variables -- no URLs or secrets are hardcoded in the codebase.
+
+### Backend (Railway)
+
+Set the following environment variables in your Railway backend service:
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string (reference from your Railway Postgres service) |
+| `SECRET_KEY` | A long, random cryptographic key for signing JWT tokens |
+| `ALGORITHM` | `HS256` |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | `1440` (24 hours) |
+| `ADMIN_USERNAME` | Username for the initial admin account |
+| `ADMIN_PASSWORD` | Password for the initial admin account |
+| `FRONTEND_URL` | Your Vercel frontend URL (for CORS, e.g. `https://your-app.vercel.app`) |
+
+Set the custom start command to:
+```
+alembic upgrade head && python -m scripts.seed_admin && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+### Frontend (Vercel)
+
+Set the following environment variable in your Vercel project settings:
+
+| Variable | Description |
+|----------|-------------|
+| `VITE_API_URL` | Your Railway backend URL with the API prefix (e.g. `https://your-backend.up.railway.app/api/v1`) |
+
+After setting or changing `VITE_API_URL`, you must redeploy the frontend for the change to take effect (Vite bakes environment variables into the JavaScript bundle at build time).
 
 ---
 

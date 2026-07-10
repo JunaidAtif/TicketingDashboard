@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -6,24 +7,23 @@ from app.api.v1 import auth, tickets
 
 app = FastAPI(title="Support Ticket Dashboard API")
 
-import os
+# Configure CORS - driven entirely by environment variables
+# In production, set FRONTEND_URL to your deployed frontend domain
+# When FRONTEND_URL is not set (local dev), all origins are allowed
+frontend_url = os.environ.get("FRONTEND_URL", "")
 
-# Configure CORS
 allowed_origins = [
     "http://localhost:5173",
     "http://localhost:8080",
     "http://localhost:3000",
-    "https://ticketingdashboardupdated.vercel.app",
 ]
 
-# Also allow any Vercel preview URL
-frontend_url = os.environ.get("FRONTEND_URL")
 if frontend_url:
     allowed_origins.append(frontend_url)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins if frontend_url else ["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],

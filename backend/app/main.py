@@ -6,12 +6,25 @@ from app.api.v1 import auth, tickets
 
 app = FastAPI(title="Support Ticket Dashboard API")
 
+import os
+
 # Configure CORS
+allowed_origins = [
+    "http://localhost:5173",
+    "http://localhost:8080",
+    "http://localhost:3000",
+    "https://ticketingdashboardupdated.vercel.app",
+]
+
+# Also allow any Vercel preview URL
+frontend_url = os.environ.get("FRONTEND_URL")
+if frontend_url:
+    allowed_origins.append(frontend_url)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:8080", "http://localhost:3000"],
-    allow_origin_regex=r"https://.*",
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

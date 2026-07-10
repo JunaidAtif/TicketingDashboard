@@ -2,7 +2,7 @@
 
 A full-stack, Jira-style support ticket management system designed for customer support teams. Built with a modern React frontend and a highly scalable FastAPI backend.
 
-**Live Demo:** [https://ticketingdashboard-lj2r5x2h8-tommyreirdon.vercel.app/](https://ticketingdashboard-lj2r5x2h8-tommyreirdon.vercel.app/)
+**Live Demo:** [https://ticketingdashboard-sepia.vercel.app](https://ticketingdashboard-sepia.vercel.app?_vercel_share=NBTQjcVtTla9J2KnIgjCCepcur7JqVQy)
 
 ---
 

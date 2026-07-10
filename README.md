@@ -2,7 +2,9 @@
 
 A full-stack, Jira-style support ticket management system designed for customer support teams. Built with a modern React frontend and a highly scalable FastAPI backend.
 
-![Support Dashboard Overview](https://via.placeholder.com/1200x600.png?text=Support+Ticket+Dashboard)
+**Live Demo:** [https://ticketingdashboard-three.vercel.app](https://ticketingdashboard-three.vercel.app)
+**Backend API:** [https://ticketingdashboard-production.up.railway.app](https://ticketingdashboard-production.up.railway.app)
+**API Docs (Swagger):** [https://ticketingdashboard-production.up.railway.app/docs](https://ticketingdashboard-production.up.railway.app/docs)
 
 ---
 
@@ -101,7 +103,7 @@ uvicorn app.main:app --reload --port 8000
 
 ---
 
-### 3. Frontend Setup
+### 3. Frontend Setups
 Open a new terminal window and navigate to the frontend directory:
 ```bash
 cd frontend
